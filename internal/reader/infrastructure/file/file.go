@@ -1,11 +1,24 @@
 package file
 
-import "stori/pkg/transaction"
+import (
+	"log"
+	"os"
+	"stori/internal/reader/domain"
+	"stori/pkg/transaction"
+)
 
 type ReaderFile struct {
-	File string
+	SliceReader domain.ReaderSlice
+	File        string
 }
 
 func (r *ReaderFile) Read() ([]transaction.Transaction, error) {
-	return nil, nil
+	log.Println("read method from ReaderFile")
+
+	file, err := os.ReadFile(r.File)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.SliceReader.Read(file)
 }
