@@ -1,8 +1,7 @@
 package infrastructure
 
 import (
-	"fmt"
-
+	"log"
 	calculator "stori/internal/calculator/domain"
 	reader "stori/internal/reader/domain"
 	"stori/pkg/result"
@@ -19,7 +18,13 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		return result.Result{}, err
 	}
 
-	fmt.Println(data)
+	log.Println(data)
+
+	res, err := p.Calculator.Calculate(data)
+	if err != nil {
+		return result.Result{}, err
+	}
+	log.Println(res)
 
 	return result.Result{}, nil
 }

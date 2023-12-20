@@ -1,15 +1,13 @@
 package infrastructure
 
 import (
-	"stori/internal/reader/domain"
+	"log"
 	"stori/pkg/transaction"
 )
 
-type ReaderCSV struct {
-	FilePath string
-	Reader   domain.Reader
-}
+type ReaderCSV struct{}
 
 func (r *ReaderCSV) Read() ([]transaction.Transaction, error) {
+	log.Println("read method from ReaderCSV")
 	return nil, nil
 }

@@ -3,14 +3,15 @@ package main
 import (
 	"flag"
 	"log"
-	"stori/pkg/processor/application"
+
+	processor "stori/pkg/processor/application"
 )
 
 func main() {
 	file := getFlags()
 	log.Println(file)
 
-	res, err := application.New(file).Process()
+	res, err := processor.New(file).Process()
 
 	if err != nil {
 		log.Fatal(err)
