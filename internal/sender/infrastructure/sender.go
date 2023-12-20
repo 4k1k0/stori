@@ -11,9 +11,7 @@ type EmailSender struct {
 
 func (e *EmailSender) Send(r result.Result, data []byte) error {
 	log.Println("Send email from EmailSender")
-	return nil
-}
 
-func (e *EmailSender) format(r result.Result) []byte {
+	_, _ = CreateTemplate(r)
 	return nil
 }
