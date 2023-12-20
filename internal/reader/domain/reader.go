@@ -5,9 +5,9 @@ import (
 )
 
 type Reader interface {
-	Read() ([]transaction.Transaction, error)
+	Read() ([]transaction.Transaction, []byte, error)
 }
 
 type ReaderSlice interface {
-	Read(data []byte) ([]transaction.Transaction, error)
+	Read(data []byte) ([]transaction.Transaction, []byte, error)
 }

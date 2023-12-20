@@ -16,7 +16,7 @@ type ProcessorTransactions struct {
 }
 
 func (p *ProcessorTransactions) Process() (result.Result, error) {
-	data, err := p.Reader.Read()
+	data, info, err := p.Reader.Read()
 	if err != nil {
 		return result.Result{}, err
 	}
@@ -26,7 +26,7 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		return result.Result{}, err
 	}
 
-	err = p.Sender.Send(res)
+	err = p.Sender.Send(res, info)
 	if err != nil {
 		log.Println("error sending email")
 		log.Println(err)

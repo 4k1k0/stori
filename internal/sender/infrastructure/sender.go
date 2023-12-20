@@ -9,7 +9,7 @@ type EmailSender struct {
 	Email string
 }
 
-func (e *EmailSender) Send(r result.Result) error {
+func (e *EmailSender) Send(r result.Result, data []byte) error {
 	log.Println("Send email from EmailSender")
 	return nil
 }

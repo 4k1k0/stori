@@ -11,10 +11,10 @@ type ReaderFile struct {
 	File        string
 }
 
-func (r *ReaderFile) Read() ([]transaction.Transaction, error) {
+func (r *ReaderFile) Read() ([]transaction.Transaction, []byte, error) {
 	file, err := os.ReadFile(r.File)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	return r.SliceReader.Read(file)
