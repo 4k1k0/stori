@@ -15,7 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println(res)
+	log.Printf("%+v", res)
 }
 
 func getFlags() (string, string) {

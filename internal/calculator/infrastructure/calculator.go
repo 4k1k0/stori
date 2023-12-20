@@ -4,9 +4,14 @@ import (
 	"log"
 	"stori/pkg/result"
 	"stori/pkg/transaction"
-	"strconv"
-	"strings"
 )
+
+type Details struct {
+	Total      float64
+	Collection CollectionTrxDetails
+}
+
+type CollectionTrxDetails map[int]TransactionDetails
 
 type TransactionDetails struct {
 	Total             int
@@ -17,47 +22,60 @@ type TransactionDetails struct {
 type TransactionsCalculator struct{}
 
 func (t *TransactionsCalculator) Calculate(col []transaction.Transaction) (result.Result, error) {
-	_ = TotalBalance(col)
-	return result.Result{}, nil
+	tmp := Process(col)
+	res := GetResult(tmp)
+
+	return res, nil
 }
 
-func TotalBalance(col []transaction.Transaction) float64 {
+func Process(col []transaction.Transaction) Details {
 	var total float64
-	monthlyInfo := map[int]TransactionDetails{}
+	monthlyInfo := CollectionTrxDetails{}
 
 	for i := 0; i < len(col); i++ {
-		total += GetAmount(col[i].Transaction)
-		month := GetMonth(col[i].Date)
+		c, d := col[i].GetAmounts()
+		total += c
+		total += d
+		month := col[i].GetMonth()
 
 		if _, ok := monthlyInfo[month]; !ok {
 			monthlyInfo[month] = TransactionDetails{
-				Total: 1,
+				Total:             1,
+				TotalDebitAmount:  d,
+				TotalCreditAmount: c,
 			}
 		} else {
 			tmp := monthlyInfo[month]
 			tmp.Total++
+			tmp.TotalCreditAmount += c
+			tmp.TotalDebitAmount += d
 			monthlyInfo[month] = tmp
 		}
 	}
 
-	log.Printf("%+v", monthlyInfo)
-
-	return total
-}
-
-func GetMonth(date string) int {
-	month := strings.Split(date, "/")[0]
-	tmp, _ := strconv.ParseInt(month, 10, 64)
-	return int(tmp)
-}
-
-func GetAmount(trx string) float64 {
-	symbol := trx[0]
-	tmpAmount := trx[1:]
-	amount, _ := strconv.ParseFloat(tmpAmount, 64)
-
-	if string(symbol) == "+" {
-		return amount
+	return Details{
+		Total:      total,
+		Collection: monthlyInfo,
 	}
-	return -amount
+}
+
+func GetResult(res Details) result.Result {
+	transactions := make([]result.TransactionDetails, len(res.Collection))
+	var i int
+
+	for k, v := range res.Collection {
+		log.Println(k, v)
+		transactions[i] = result.TransactionDetails{
+			Month:                k,
+			NumberOfTransactions: v.Total,
+			AverageDebitAmount:   v.TotalDebitAmount / float64(v.Total),
+			AverageCreditAmount:  v.TotalCreditAmount / float64(v.Total),
+		}
+		i++
+	}
+
+	return result.Result{
+		TotalBalance: res.Total,
+		Transactions: transactions,
+	}
 }

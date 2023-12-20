@@ -21,13 +21,10 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		return result.Result{}, err
 	}
 
-	log.Println(data)
-
 	res, err := p.Calculator.Calculate(data)
 	if err != nil {
 		return result.Result{}, err
 	}
-	log.Println(res)
 
 	err = p.Sender.Send(res)
 	if err != nil {
@@ -35,5 +32,5 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		log.Println(err)
 	}
 
-	return result.Result{}, nil
+	return res, nil
 }
