@@ -6,11 +6,13 @@ import (
 
 	calculator "stori/internal/calculator/application"
 	reader "stori/internal/reader/application"
+	sender "stori/internal/sender/application"
 )
 
-func New(file string) domain.Processor {
+func New(file, email string) domain.Processor {
 	return &infrastructure.ProcessorTransactions{
 		Reader:     reader.New(file),
 		Calculator: calculator.New(),
+		Sender:     sender.New(email),
 	}
 }

@@ -8,10 +8,8 @@ import (
 )
 
 func main() {
-	file := getFlags()
-	log.Println(file)
-
-	res, err := processor.New(file).Process()
+	file, email := getFlags()
+	res, err := processor.New(file, email).Process()
 
 	if err != nil {
 		log.Fatal(err)
@@ -20,9 +18,10 @@ func main() {
 	log.Println(res)
 }
 
-func getFlags() string {
+func getFlags() (string, string) {
 	file := flag.String("file", "", "a file path")
+	email := flag.String("email", "", "an email")
 	flag.Parse()
 
-	return *file
+	return *file, *email
 }

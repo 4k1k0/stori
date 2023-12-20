@@ -3,7 +3,6 @@ package transaction
 import (
 	"errors"
 	"fmt"
-	"log"
 	"regexp"
 )
 
@@ -52,8 +51,6 @@ func (t Transaction) validateTransaction() error {
 }
 
 func (c Collection) Validate() error {
-	log.Println("Validate method for a transaction collection")
-	log.Println(c)
 	if len(c) == 0 {
 		return nil
 	}
