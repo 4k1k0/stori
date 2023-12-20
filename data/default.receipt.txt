@@ -1,0 +1,19 @@
+------------
+Hi Jon Snow,
+------------
+
+Your order has been processed successfully.
+
++----------+-------+--------+--------+
+|  MONTH   | TOTAL | DEBIT  | CREDIT |
++----------+-------+--------+--------+
+| January  |    11 | $10.99 | $10.99 |
+| February |    18 | $12.99 | $10.99 |
++----------+-------+--------+--------+
+
+Total Balance: $100.00
+
+Yours truly,
+Stori - https://example-hermes.com/
+
+Copyright © 2023 Stori. All rights reserved.
