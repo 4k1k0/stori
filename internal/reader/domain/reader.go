@@ -1,11 +1,14 @@
 package domain
 
-import "io"
+import (
+	"io"
+	"stori/pkg/transaction"
+)
 
 type Reader interface {
-	Read() (interface{}, error)
+	Read() ([]transaction.Transaction, error)
 }
 
 type ReaderIO interface {
-	Read(r io.Reader) (interface{}, error)
+	Read(r io.Reader) ([]transaction.Transaction, error)
 }
