@@ -19,6 +19,10 @@ type Transaction struct {
 	Transaction string `json:"transaction"`
 }
 
+func (t Transaction) IsCredit() bool {
+	return string(t.Transaction[0]) == "+"
+}
+
 func (t Transaction) Validate() error {
 	err := t.validateDate()
 	if err != nil {
