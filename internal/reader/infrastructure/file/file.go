@@ -7,11 +7,12 @@ import (
 )
 
 type ReaderFile struct {
-	Path string
+	File string
 }
 
 func (r *ReaderFile) Read() ([]transaction.Transaction, error) {
-	file, err := os.ReadFile(r.Path)
+	log.Printf("Read method frmo file struct | %q", r.File)
+	file, err := os.ReadFile(r.File)
 
 	if err != nil {
 		return nil, err

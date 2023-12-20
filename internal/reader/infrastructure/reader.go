@@ -10,12 +10,6 @@ type ReaderCSV struct {
 	Reader   domain.Reader
 }
 
-func New(file string) *ReaderCSV {
-	return &ReaderCSV{
-		FilePath: file,
-	}
-}
-
 func (r *ReaderCSV) Read() ([]transaction.Transaction, error) {
 	return nil, nil
 }

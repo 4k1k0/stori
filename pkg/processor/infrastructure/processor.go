@@ -2,27 +2,24 @@ package infrastructure
 
 import (
 	"fmt"
-	"log"
 
 	calculator "stori/internal/calculator/domain"
 	reader "stori/internal/reader/domain"
+	"stori/pkg/result"
 )
 
 type ProcessorTransactions struct {
 	Calculator calculator.Calculator
-	File       string
 	Reader     reader.Reader
 }
 
-func (p *ProcessorTransactions) Process() (interface{}, error) {
-	log.Println("Opening file", p.File)
-
+func (p *ProcessorTransactions) Process() (result.Result, error) {
 	data, err := p.Reader.Read()
 	if err != nil {
-		return nil, err
+		return result.Result{}, err
 	}
 
 	fmt.Println(data)
 
-	return nil, nil
+	return result.Result{}, nil
 }

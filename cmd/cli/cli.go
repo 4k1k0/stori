@@ -10,7 +10,7 @@ func main() {
 	file := getFlags()
 	log.Println(file)
 
-	res, err := application.New(file, application.ProcessorFile).Process()
+	res, err := application.New(file).Process()
 
 	if err != nil {
 		log.Fatal(err)

@@ -6,15 +6,9 @@ import (
 	"stori/pkg/processor/infrastructure"
 )
 
-type ProcessorType string
-
-const (
-	ProcessorFile ProcessorType = "ProcessorFile"
-)
-
-func New(path string, pt ProcessorType) domain.Processor {
+func New(file string) domain.Processor {
 	return &infrastructure.ProcessorTransactions{
-		File:   path,
-		Reader: reader.New(),
+		Reader:     reader.New(file),
+		Calculator: nil,
 	}
 }

@@ -1,5 +1,7 @@
 package domain
 
+import "stori/pkg/result"
+
 type Processor interface {
-	Process() (interface{}, error)
+	Process() (result.Result, error)
 }
