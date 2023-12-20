@@ -3,6 +3,7 @@ package transaction
 import (
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 )
 
@@ -10,6 +11,8 @@ const (
 	PatterDate        = `^(1[0-2]|[1-9])/([1-9]|[1-2][0-9]|3[0-1])$`
 	PatterTransaction = `^(\+[0-9]+(\.[0-9]+)?|\-[0-9]+(\.[0-9]+)?)$`
 )
+
+type Collection []Transaction
 
 type Transaction struct {
 	ID          int64  `json:"id"`
@@ -46,4 +49,23 @@ func (t Transaction) validateDate() error {
 
 func (t Transaction) validateTransaction() error {
 	return t.validateData(PatterTransaction, t.Transaction)
+}
+
+func (c Collection) Validate() error {
+	log.Println("Validate method for a transaction collection")
+	log.Println(c)
+	if len(c) == 0 {
+		return nil
+	}
+
+	var err error
+
+	for i := 0; i < len(c); i++ {
+		err = c[i].Validate()
+		if err != nil {
+			break
+		}
+	}
+
+	return err
 }
