@@ -2,7 +2,7 @@
 test:
 	clear
 	go build -o stori cmd/cli/cli.go
-	./stori -file data/ex1.csv
+	./stori -file assets/ex1.csv
 
 .PHONY: compile
 compile:
