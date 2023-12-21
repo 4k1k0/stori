@@ -15,7 +15,8 @@ var assets embed.FS
 func main() {
 	file, email := getFlags()
 	config.New(assets, file, email)
-	res, err := processor.New(file, email).Process()
+
+	res, err := processor.New().Process()
 
 	if err != nil {
 		log.Fatal(err)

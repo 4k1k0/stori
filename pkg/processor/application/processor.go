@@ -5,14 +5,16 @@ import (
 	"stori/pkg/processor/infrastructure"
 
 	calculator "stori/internal/calculator/application"
+	"stori/internal/config"
 	reader "stori/internal/reader/application"
 	sender "stori/internal/sender/application"
 )
 
-func New(file, email string) domain.Processor {
+func New() domain.Processor {
+	cfg := config.Config()
 	return &infrastructure.ProcessorTransactions{
-		Reader:     reader.New(file),
+		Reader:     reader.New(cfg.FileName),
 		Calculator: calculator.New(),
-		Sender:     sender.New(email),
+		Sender:     sender.New(cfg.Email),
 	}
 }

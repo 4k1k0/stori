@@ -1,4 +1,5 @@
 .vscode
 stori
 coverage.out
-
+vendor
+data
