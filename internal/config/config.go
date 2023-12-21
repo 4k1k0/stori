@@ -1,6 +1,7 @@
 package config
 
 import (
+	"database/sql"
 	"embed"
 	"sync"
 )
@@ -9,15 +10,17 @@ var config *Cfg
 var once sync.Once
 
 type Cfg struct {
+	Database *sql.DB
 	FS       embed.FS
 	FileName string
 	Email    string
 }
 
 // New sets the project config values using a singleton.
-func New(fs embed.FS, filename, email string) *Cfg {
+func New(fs embed.FS, filename, email string, db *sql.DB) *Cfg {
 	once.Do(func() {
 		config = &Cfg{
+			Database: db,
 			FS:       fs,
 			FileName: filename,
 			Email:    email,

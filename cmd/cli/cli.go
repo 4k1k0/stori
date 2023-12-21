@@ -6,6 +6,8 @@ import (
 	"log"
 
 	"stori/internal/config"
+
+	database "stori/internal/database/application"
 	processor "stori/pkg/processor/application"
 )
 
@@ -14,7 +16,13 @@ var assets embed.FS
 
 func main() {
 	file, email := getFlags()
-	config.New(assets, file, email)
+
+	db, err := database.New().Connect()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	config.New(assets, file, email, db)
 
 	res, err := processor.New().Process()
 
