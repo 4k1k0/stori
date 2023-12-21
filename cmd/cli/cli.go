@@ -1,14 +1,20 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"log"
 
+	"stori/internal/config"
 	processor "stori/pkg/processor/application"
 )
 
+//go:embed all:assets/*
+var assets embed.FS
+
 func main() {
 	file, email := getFlags()
+	config.New(assets, file, email)
 	res, err := processor.New(file, email).Process()
 
 	if err != nil {
