@@ -23,7 +23,7 @@ func main() {
 	}
 	defer database.New().Disconnect()
 
-	config.New(assets, file, email, db)
+	_ = config.New(assets, file, email, db)
 
 	_, err = processor.New().Process()
 

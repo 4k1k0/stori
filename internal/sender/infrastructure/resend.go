@@ -7,9 +7,8 @@ import (
 	"github.com/resendlabs/resend-go"
 )
 
-func TestSender(emailHTML, to string) {
+func sendEmail(emailHTML, to string) {
 	apiKey := os.Getenv("STORI_SENDER_API_KEY")
-
 	client := resend.NewClient(apiKey)
 
 	params := &resend.SendEmailRequest{
@@ -19,11 +18,8 @@ func TestSender(emailHTML, to string) {
 		Html:    emailHTML,
 	}
 
-	sent, err := client.Emails.Send(params)
-
+	_, err := client.Emails.Send(params)
 	if err != nil {
 		log.Printf("error: %v\n", err)
 	}
-
-	log.Println(sent)
 }

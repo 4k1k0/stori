@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"log"
+	"stori/internal/config"
 	"stori/pkg/result"
 )
 
@@ -11,7 +12,7 @@ type EmailSender struct {
 
 func (e *EmailSender) Send(r result.Result, data []byte) error {
 	log.Println("Send email from EmailSender")
-
-	_ = CreateTemplate(r)
+	html := CreateTemplate(r)
+	sendEmail(html, config.Config().Email)
 	return nil
 }
