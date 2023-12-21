@@ -25,13 +25,13 @@ func main() {
 
 	config.New(assets, file, email, db)
 
-	res, err := processor.New().Process()
+	_, err = processor.New().Process()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Printf("%+v", res)
+	log.Println(":)")
 }
 
 func getFlags() (string, string) {
