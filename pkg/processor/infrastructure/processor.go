@@ -3,8 +3,10 @@ package infrastructure
 import (
 	"log"
 	"stori/pkg/result"
+	"stori/pkg/transaction"
 
 	calculator "stori/internal/calculator/domain"
+	"stori/internal/config"
 	reader "stori/internal/reader/domain"
 	sender "stori/internal/sender/domain"
 )
@@ -29,6 +31,18 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 	err = p.Sender.Send(res, info)
 	if err != nil {
 		log.Println("error sending email")
+		log.Println(err)
+	}
+
+	for i := 0; i < len(data); i++ {
+		err = transaction.SaveTransaction(config.Config().Database, data[i])
+		if err != nil {
+			break
+		}
+	}
+
+	if err != nil {
+		log.Println("There was an error saving the data")
 		log.Println(err)
 	}
 

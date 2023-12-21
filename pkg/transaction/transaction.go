@@ -43,6 +43,13 @@ func (t Transaction) GetMonth() int {
 	return int(tmp)
 }
 
+func (t Transaction) Type() string {
+	if t.IsCredit() {
+		return "Credit"
+	}
+	return "Debit"
+}
+
 func (t Transaction) Validate() error {
 	err := t.validateDate()
 	if err != nil {
