@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer database.New().Disconnect()
 
 	config.New(assets, file, email, db)
 
