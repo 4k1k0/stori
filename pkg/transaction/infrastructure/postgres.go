@@ -1,7 +1,8 @@
-package transaction
+package infrastructure
 
 import (
 	"database/sql"
+	"stori/pkg/transaction"
 	"time"
 )
 
@@ -20,12 +21,14 @@ const (
 	querySaveTransaction = `INSERT INTO "public.Transactions" ("filename", "date", "created_at", "transaction", "transaction_type") VALUES ($1, $2, $3, $4, $5)`
 )
 
+type TransactionPostgres struct{}
+
 func createTable(db *sql.DB) error {
 	_, err := db.Exec(queryCreateTable)
 	return err
 }
 
-func SaveTransaction(db *sql.DB, trx Transaction) error {
+func (*TransactionPostgres) Save(db *sql.DB, trx transaction.Transaction) error {
 	if err := createTable(db); err != nil {
 		return err
 	}

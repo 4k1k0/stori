@@ -3,12 +3,12 @@ package infrastructure
 import (
 	"log"
 	"stori/pkg/result"
-	"stori/pkg/transaction"
 
 	calculator "stori/internal/calculator/domain"
 	"stori/internal/config"
 	reader "stori/internal/reader/domain"
 	sender "stori/internal/sender/domain"
+	dbTrx "stori/pkg/transaction/application"
 )
 
 type ProcessorTransactions struct {
@@ -34,8 +34,10 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		log.Println(err)
 	}
 
+	trxDB := dbTrx.New()
+
 	for i := 0; i < len(data); i++ {
-		err = transaction.SaveTransaction(config.Config().Database, data[i])
+		err = trxDB.Save(config.Config().Database, data[i])
 		if err != nil {
 			break
 		}
