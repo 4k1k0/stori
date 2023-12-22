@@ -18,12 +18,14 @@ type S3Reader struct {
 }
 
 func (s *S3Reader) Read() ([]transaction.Transaction, []byte, error) {
+	log.Println("Read from s3 reader")
 	objOut, err := s.S3Client.GetObject(context.Background(), &s3.GetObjectInput{
 		Bucket: &s.Bucket,
 		Key:    &s.Key,
 	})
 
 	if err != nil {
+		log.Println("there was an error with getobject")
 		return nil, nil, err
 	}
 

@@ -29,7 +29,6 @@ func getS3Config(ctx context.Context) (*s3.Client, error) {
 }
 
 func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
-
 	s3Client, err := getS3Config(ctx)
 	if err != nil {
 		return "", err
@@ -41,9 +40,7 @@ func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
 		return "", nil
 	}
 
-	defer storiConfig.Config().Database.Close()
-
-	storiConfig.New(storiConfig.Cfg{
+	_ = storiConfig.New(storiConfig.Cfg{
 		FS:       assets,
 		Email:    os.Getenv("STORI_EMAIL"),
 		Database: db,
@@ -58,6 +55,8 @@ func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
 		log.Println("there was an error during the execution")
 		return "", err
 	}
+
+	// storiConfig.Config().Database.Close()
 
 	return "ok", nil
 }
