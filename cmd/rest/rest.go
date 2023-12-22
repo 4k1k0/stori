@@ -30,7 +30,7 @@ func main() {
 	})
 
 	app.Post("/:email", func(c *fiber.Ctx) error {
-		_ = config.New(assets, "data/ex1.csv", c.Params("email"), db)
+		_ = config.New(config.Cfg{FS: assets, FileName: "data/ex1.csv", Email: c.Params("email"), Database: db})
 
 		res, err := application.New().Process()
 

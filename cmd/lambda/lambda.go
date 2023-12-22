@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"embed"
-	"io"
 	"log"
 	"os"
 
@@ -29,36 +28,13 @@ func getS3Config(ctx context.Context) (*s3.Client, error) {
 	return s3.NewFromConfig(sdkConfig), nil
 }
 
-func getFileContent(ctx context.Context, event events.S3Event) ([]byte, error) {
+func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
+
 	s3Client, err := getS3Config(ctx)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	bucket := event.Records[0].S3.Bucket.Name
-	key := event.Records[0].S3.Object.URLDecodedKey
-
-	objOut, err := s3Client.GetObject(ctx, &s3.GetObjectInput{
-		Bucket: &bucket,
-		Key:    &key,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer objOut.Body.Close()
-
-	fileContent, err := io.ReadAll(objOut.Body)
-	if err != nil {
-		log.Println("there was an error with readAll function")
-		return nil, err
-	}
-
-	return fileContent, nil
-}
-
-func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
 	db, err := database.New().Connect()
 	if err != nil {
 		log.Println("there was an error with the database")
@@ -67,7 +43,15 @@ func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
 
 	defer storiConfig.Config().Database.Close()
 
-	storiConfig.New(assets, "", os.Getenv("STORI_EMAIL"), db)
+	storiConfig.New(storiConfig.Cfg{
+		FS:       assets,
+		Email:    os.Getenv("STORI_EMAIL"),
+		Database: db,
+		S3Config: storiConfig.S3Config{
+			Bucket:   event.Records[0].S3.Bucket.Name,
+			Key:      event.Records[0].S3.Object.URLDecodedKey,
+			S3Client: s3Client,
+		}})
 
 	_, err = processor.New().Process()
 	if err != nil {
