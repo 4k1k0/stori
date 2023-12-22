@@ -2,10 +2,14 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"embed"
 	"io"
 	"log"
 	"os"
+
+	storiConfig "stori/internal/config"
+	database "stori/internal/database/application"
+	processor "stori/pkg/processor/application"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -13,18 +17,23 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func HandleRequest(ctx context.Context, event events.S3Event) (*string, error) {
-	message := fmt.Sprintf("Event: %+v", event)
-	log.Println(os.Environ())
-	log.Println(message)
+//go:embed all:assets/*
+var assets embed.FS
 
+func getS3Config(ctx context.Context) (*s3.Client, error) {
 	sdkConfig, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
-		log.Printf("failed to load default config: %s", err)
-		return &message, err
+		log.Println("could not load default config")
+		return nil, err
 	}
+	return s3.NewFromConfig(sdkConfig), nil
+}
 
-	s3Client := s3.NewFromConfig(sdkConfig)
+func getFileContent(ctx context.Context, event events.S3Event) ([]byte, error) {
+	s3Client, err := getS3Config(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	bucket := event.Records[0].S3.Bucket.Name
 	key := event.Records[0].S3.Object.URLDecodedKey
@@ -35,34 +44,38 @@ func HandleRequest(ctx context.Context, event events.S3Event) (*string, error) {
 	})
 
 	if err != nil {
-		log.Println("could not load file with get object function")
-		return &message, err
+		return nil, err
 	}
 
 	defer objOut.Body.Close()
 
-	x, err := io.ReadAll(objOut.Body)
+	fileContent, err := io.ReadAll(objOut.Body)
 	if err != nil {
-		log.Println("could not read the file with readAll function")
-		return &message, err
+		log.Println("there was an error with readAll function")
+		return nil, err
 	}
 
-	fileString := string(x)
+	return fileContent, nil
+}
 
-	log.Println("file:")
-	log.Println(fileString)
-
-	headOutput, err := s3Client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: &bucket,
-		Key:    &key,
-	})
+func HandleRequest(ctx context.Context, event events.S3Event) (string, error) {
+	db, err := database.New().Connect()
 	if err != nil {
-		log.Printf("error getting head of object %s/%s: %s", bucket, key, err)
-		return &message, err
+		log.Println("there was an error with the database")
+		return "", nil
 	}
-	log.Printf("successfully retrieved %s/%s of type %s", bucket, key, *headOutput.ContentType)
 
-	return &message, nil
+	defer storiConfig.Config().Database.Close()
+
+	storiConfig.New(assets, "", os.Getenv("STORI_EMAIL"), db)
+
+	_, err = processor.New().Process()
+	if err != nil {
+		log.Println("there was an error during the execution")
+		return "", err
+	}
+
+	return "ok", nil
 }
 
 func main() {
