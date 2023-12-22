@@ -3,6 +3,7 @@ module stori
 go 1.21.4
 
 require (
+	github.com/aws/aws-lambda-go v1.43.0
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/jszwec/csvutil v1.9.0
 	github.com/lib/pq v1.10.9
