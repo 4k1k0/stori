@@ -1,9 +1,3 @@
-.PHONY: test
-test:
-	clear
-	go build -o stori cmd/cli/cli.go
-	./stori -file data/ex1.csv
-
 .PHONY: compile
 compile:
 	go build -o stori cmd/cli/cli.go
