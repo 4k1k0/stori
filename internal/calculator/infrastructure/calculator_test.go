@@ -14,8 +14,7 @@ func TestTransactionsCalculator_Calculate(t *testing.T) {
 		{ID: 3, Date: "1/13", Transaction: "-10"},
 		{ID: 3, Date: "1/14", Transaction: "-10"},
 	}
-	res, err := (&TransactionsCalculator{}).Calculate(input)
-	assert.Nil(t, err)
+	res := (&TransactionsCalculator{}).Calculate(input)
 	assert.Equal(t, float64(0), res.TotalBalance)
 	assert.Equal(t, 1, len(res.Transactions))
 	assert.Equal(t, 1, res.Transactions[0].Month)
