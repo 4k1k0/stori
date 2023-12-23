@@ -80,10 +80,12 @@ $ zip fooo
 
 The lambda should react to a S3 bucket. So when a new csv file is uploaded the tool generate the report and send the email.
 
-## Test
+## Tests
 
-You can run and verify the unit tests with:
+You can run the tests executing the following command:
 
 ```shell
 $ make coverage
 ```
+
+This will give you information about the tests coverage on your terminal and your web browser.
