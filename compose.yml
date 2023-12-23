@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  server:
+    build:
+      context: .
+      target: final
+    restart: always
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - STORI_EMAIL=$STORI_EMAIL
+      - STORI_POSTGRES_DBNAME=$STORI_POSTGRES_DBNAME
+      - STORI_POSTGRES_PASSWORD=$STORI_POSTGRES_PASSWORD
+      - STORI_POSTGRES_HOST=$STORI_POSTGRES_HOST
+      - STORI_POSTGRES_PORT=$STORI_POSTGRES_PORT
+      - STORI_POSTGRES_USER=$STORI_POSTGRES_USER
+      - STORI_SENDER_API_KEY=$STORI_SENDER_API_KEY
+  db:
+    image: postgres:16
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: wako
+    ports:
+      - 5432:5432

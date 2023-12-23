@@ -14,6 +14,9 @@ type PostgresConnector struct{}
 
 func (p *PostgresConnector) Connect() (*sql.DB, error) {
 	log.Println("Trying to connect to postgres")
+
+	log.Printf("OS ENV VAriables: %+v", os.Environ())
+
 	connectionDetails := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("STORI_POSTGRES_HOST"),
