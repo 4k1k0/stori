@@ -23,10 +23,7 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 		return result.Result{}, err
 	}
 
-	res, err := p.Calculator.Calculate(data)
-	if err != nil {
-		return result.Result{}, err
-	}
+	res := p.Calculator.Calculate(data)
 
 	err = p.Sender.Send(res, info)
 	if err != nil {
@@ -44,7 +41,7 @@ func (p *ProcessorTransactions) Process() (result.Result, error) {
 	}
 
 	if err != nil {
-		log.Println("There was an error saving the data")
+		log.Println("there was an error saving the data")
 		log.Println(err)
 	}
 

@@ -23,11 +23,9 @@ type TransactionDetails struct {
 
 type TransactionsCalculator struct{}
 
-func (t *TransactionsCalculator) Calculate(col []transaction.Transaction) (result.Result, error) {
+func (t *TransactionsCalculator) Calculate(col []transaction.Transaction) result.Result {
 	tmp := Process(col)
-	res := GetResult(tmp)
-
-	return res, nil
+	return GetResult(tmp)
 }
 
 func Process(col []transaction.Transaction) Details {

@@ -6,5 +6,5 @@ import (
 )
 
 type Calculator interface {
-	Calculate(col []transaction.Transaction) (result.Result, error)
+	Calculate(col []transaction.Transaction) result.Result
 }

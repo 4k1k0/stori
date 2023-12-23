@@ -1,3 +1,9 @@
+.PHONY: test
+test:
+	clear
+	go build -o stori cmd/cli/cli.go
+	./stori -file data/ex2.csv -email developer.rodrigo.patino@gmail.com
+
 .PHONY: compile
 compile:
 	go build -o stori cmd/cli/cli.go

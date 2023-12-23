@@ -13,6 +13,6 @@ type EmailSender struct {
 func (e *EmailSender) Send(r result.Result, data []byte) error {
 	log.Println("Send email from EmailSender")
 	html := CreateTemplate(r)
-	sendEmail(html, config.Config().Email)
+	sendEmail(html, config.Config().Email, data)
 	return nil
 }
