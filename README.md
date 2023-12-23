@@ -48,7 +48,7 @@ You need to setup an API Key for [resend](https://resend.com/).
 $ docker compose up
 ```
 
-### CLI Tool
+* CLI Tool
 
 Compile the binary.
 
@@ -61,10 +61,21 @@ Execute the tool.
 $ ./stori -file input.csv -email your@email.com
 ```
 
-### REST API
+* REST API
 
 Make a GET request to your `localhost:3000` passing your email as a URL param.
 
 ```shell
 $ curl -XGET 'http://localhost:3000/your@email.com'
 ```
+
+* AWS Lambda
+
+Deploy the AWS Lambda 
+
+```shell
+$ go build xxxx
+$ zip fooo
+```
+
+The lambda should react to a S3 bucket. So when a new csv file is uploaded the tool generate the report and send the email.
