@@ -71,12 +71,7 @@ $ curl -XGET 'http://localhost:3000/your@email.com'
 
 #### AWS Lambda
 
-Deploy the AWS Lambda 
-
-```shell
-$ go build xxxx
-$ zip fooo
-```
+You can use the [GitHub Actions](https://docs.github.com/en/actions) and [Terraform](https://www.terraform.io/) config files to deploy the application.
 
 The lambda should react to a S3 bucket. So when a new csv file is uploaded the tool generate the report and send the email.
 
